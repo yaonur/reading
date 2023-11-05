@@ -6,6 +6,7 @@
 
 	let previousWord = '';
 	let countdown = 200;
+	let counter=countdown
 
 	let createdWord = '';
 	let spellingA = '';
@@ -13,6 +14,7 @@
 	let interval: any;
 	let progressBarInterval: any;
 	let isZen = false;
+	let gameOn=false
 	$: timer = 2000;
 	let selectedInterval = 2000;
 	const vowels = ['a', 'e', 'ı', 'i', 'o', 'ö', 'u', 'ü'];
@@ -93,7 +95,7 @@
 			// 	break;
 			// }
 		} while (createdWord === previousWord);
-		countdown--;
+		counter--;
 
 		previousWord = createdWord;
 
@@ -103,7 +105,7 @@
 			spellingA = previousWord;
 			startWithVowel ? (spellingB = constant) : (spellingB = vowel);
 		}
-		if (countdown === 0) {
+		if (counter === 0) {
 			clearInterval(interval);
 		}
 	}
@@ -112,6 +114,9 @@
 	});
 	function startGame() {
 		if (!createdWord) randomWord();
+		gameOn=true
+		timer=selectedInterval;
+		counter=countdown
 		clearInterval(interval);
 		clearInterval(progressBarInterval);
 		startProgressBar();
@@ -123,6 +128,8 @@
 		);
 	}
 	function stopGame() {
+		gameOn=false
+		counter=countdown
 		clearInterval(interval);
 		clearInterval(progressBarInterval);
 	}
@@ -148,7 +155,7 @@
 		? 'justify-center gap-8'
 		: 'justify-around'} bg-slate-300 sm:h-full sm:min-h-screen"
 >
-	{#if !isZen}
+	{#if !isZen && !gameOn}
 		<!-- content here -->
 		<div class="flex flex-col gap-4">
 			<div>
@@ -192,15 +199,17 @@
 	{#if error}
 		<p class="text-red-500">{error}</p>
 	{/if}
-	<div class="flex flex-col items-center">
-		<p class="text-9xl leading-tight underline">{createdWord}</p>
-		<div class="flex gap-16 text-6xl font-light leading-none underline">
-			<p>{spellingA}</p>
-			<p>{spellingB}</p>
-		</div>
-	</div>
-	{#if !isZen}
-		<div class="p-4">
+	{#if gameOn}
+		 <!-- content here -->
+		 <div class="flex flex-col items-center">
+			 <p class="text-9xl leading-tight underline transition-all duration-1000 ease-linear ">{createdWord}</p>
+			 <div class="flex gap-16 text-6xl font-light leading-none underline">
+				 <p>{spellingA}</p>
+				 <p>{spellingB}</p>
+			 </div>
+		 </div>
+	{/if}
+		<div class="p-4 {isZen?"opacity-0":"opacity-100"}">
 			<div class="h-1 bg-red-500">
 				<div id="timer-bar" class="h-full bg-green-500" />
 			</div>
@@ -223,12 +232,12 @@
 					<label class="leading-none">Tekrar Sayısı: {countdown}</label>
 					<label>
 						<input type="checkbox" bind:checked={isZen} />
-						Zen Modu
+						Odak Modu
 					</label>
 				</div>
 			</div>
+			<p class="text-center">{counter}</p>
 		</div>
-	{/if}
 	{#if isZen}
 		<label class="absolute top-10">
 			<input type="checkbox" bind:checked={isZen} />

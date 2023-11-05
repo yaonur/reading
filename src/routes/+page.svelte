@@ -6,16 +6,17 @@
 
 	let previousWord = '';
 	let countdown = 200;
-	let counter=countdown
+	let counter = countdown;
 
-	let timerBar:any = ""
+	let timerBar: any = '';
 	let createdWord = '';
 	let spellingA = '';
 	let spellingB = '';
 	let interval: any;
 	let progressBarInterval: any;
 	let isZen = false;
-	let gameOn=false
+	let gameOn = false;
+	let gameFinished = false;
 	$: timer = 2000;
 	let selectedInterval = 2000;
 	const vowels = ['a', 'e', 'ı', 'i', 'o', 'ö', 'u', 'ü'];
@@ -109,23 +110,30 @@
 		}
 		if (counter === 0) {
 			clearInterval(interval);
+			clearInterval(progressBarInterval);
+			progressBarTimer = timer
+			timerBar.style.width = `${(progressBarTimer / timer) * 100}%`;
+			gameFinished=true
+			gameOn = false;
 		}
 	}
 	onMount(() => {
 		// randomWord();
 	});
 	function startGame() {
+		gameFinished=false
 		if (
 			(selectedVowels.length < 2 || selectedConstants.length === 0) &&
 			(selectedVowels.length === 0 || selectedConstants.length < 2)
-		) {
-			error = 'Lütfen en az 2 sesli harf ve 1 sessiz harf seçiniz  veya 1 sesli harf ve en az 2 sessiz harf seçiniz';
-			return;
-		}
-		if (!createdWord) randomWord();
-		gameOn=true
-		timer=selectedInterval;
-		counter=countdown
+			) {
+				error =
+				'Lütfen en az 2 sesli harf ve 1 sessiz harf seçiniz  veya 1 sesli harf ve en az 2 sessiz harf seçiniz';
+				return;
+			}
+			if (!createdWord) randomWord();
+		gameOn = true;
+		timer = selectedInterval;
+		counter = countdown;
 		clearInterval(interval);
 		clearInterval(progressBarInterval);
 		startProgressBar();
@@ -137,8 +145,8 @@
 		);
 	}
 	function stopGame() {
-		gameOn=false
-		counter=countdown
+		gameOn = false;
+		counter = countdown;
 		progressBarTimer = timer;
 		timerBar = document.getElementById('timer-bar');
 		timerBar.style.width = `${(progressBarTimer / timer) * 100}%`;
@@ -211,46 +219,52 @@
 		<p class="text-red-500">{error}</p>
 	{/if}
 	{#if gameOn}
-		 <!-- content here -->
-		 <div class="flex flex-col items-center">
-			 <p class="text-9xl leading-tight underline transition-all duration-1000 ease-linear ">{createdWord}</p>
-			 <div class="flex gap-16 text-6xl font-light leading-none underline">
-				 <p>{spellingA}</p>
-				 <p>{spellingB}</p>
-			 </div>
-		 </div>
-	{/if}
-		<div class="p-4 {isZen?"opacity-0":"opacity-100"}">
-			{#if gameOn}
-				 <p class="text-center">Kalan Kelime:{counter}</p>
-			{/if}
-			<div class="h-1 bg-red-500">
-				<div id="timer-bar" class="h-full bg-green-500" />
-			</div>
-			<div>
-				<input
-					class="w-full"
-					type="range"
-					min="500"
-					max="15000"
-					step="100"
-					bind:value={selectedInterval}
-				/>
-				<p>Aralık:{selectedInterval / 1000} saniye</p>
-			</div>
-			<div class="flex gap-4 items-center">
-				<Button on:click={startGame} class="h-6 w-16 rounded-xl   bg-blue-500">Başla</Button>
-				<Button on:click={stopGame} class="h-6 w-16 rounded-xl  ">Bitir</Button>
-				<div class="flex flex-col">
-					<input type="range" min="20" max="500" step="5" bind:value={countdown} />
-					<label class="leading-none">Tekrar Sayısı: {countdown}</label>
-					<label>
-						<input type="checkbox" bind:checked={isZen} disabled={!gameOn}/>
-						Odak Modu
-					</label>
-				</div>
+		<!-- content here -->
+		<div class="flex flex-col items-center">
+			<p class="text-9xl leading-tight underline transition-all duration-1000 ease-linear">
+				{createdWord}
+			</p>
+			<div class="flex gap-16 text-6xl font-light leading-none underline">
+				<p class="text-red-600">{spellingA}</p>
+				<p class="text-blue-600">{spellingB}</p>
 			</div>
 		</div>
+		{:else if gameFinished}
+		<div>
+			<p>Tebrikler Bitirdin!</p>
+		</div>
+	{/if}
+	<div class="p-4 {isZen ? 'opacity-0' : 'opacity-100'}">
+		{#if gameOn}
+			<p class="text-center">Kalan Kelime:{counter}</p>
+		{/if}
+		<div class="h-1 bg-red-500">
+			<div id="timer-bar" class="h-full bg-green-500" />
+		</div>
+		<div>
+			<input
+				class="w-full"
+				type="range"
+				min="500"
+				max="15000"
+				step="100"
+				bind:value={selectedInterval}
+			/>
+			<p>Aralık:{selectedInterval / 1000} saniye</p>
+		</div>
+		<div class="flex items-center gap-4">
+			<Button on:click={startGame} class="h-6 w-16 rounded-xl   bg-blue-500">Başla</Button>
+			<Button on:click={stopGame} class="h-6 w-16 rounded-xl  ">Bitir</Button>
+			<div class="flex flex-col">
+				<input type="range" min="5" max="500" step="5" bind:value={countdown} />
+				<label class="leading-none">Tekrar Sayısı: {countdown}</label>
+				<label>
+					<input type="checkbox" bind:checked={isZen} disabled={!gameOn} />
+					Odak Modu
+				</label>
+			</div>
+		</div>
+	</div>
 	{#if isZen}
 		<label class="absolute top-10">
 			<input type="checkbox" bind:checked={isZen} />

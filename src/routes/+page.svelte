@@ -221,6 +221,9 @@
 		 </div>
 	{/if}
 		<div class="p-4 {isZen?"opacity-0":"opacity-100"}">
+			{#if gameOn}
+				 <p class="text-center">Kalan Kelime:{counter}</p>
+			{/if}
 			<div class="h-1 bg-red-500">
 				<div id="timer-bar" class="h-full bg-green-500" />
 			</div>
@@ -247,7 +250,6 @@
 					</label>
 				</div>
 			</div>
-			<p class="text-center">{counter}</p>
 		</div>
 	{#if isZen}
 		<label class="absolute top-10">

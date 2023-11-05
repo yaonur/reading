@@ -183,8 +183,8 @@
 	{#if error}
 		<p class="text-red-500">{error}</p>
 	{/if}
-	<div class="relative flex flex-col items-center">
-		<p class="text-[266px] leading-none underline">{createdWord}</p>
+	<div class="flex flex-col items-center">
+		<p class="text-[144px] leading-none underline">{createdWord}</p>
 		<div class="flex gap-24 text-6xl font-light leading-none underline">
 			<p>{spellingA}</p>
 			<p>{spellingB}</p>
@@ -194,12 +194,17 @@
 		<div class="h-4 bg-red-500">
 			<div id="timer-bar" class="h-full bg-green-500" />
 		</div>
-		<input type="range" min="500" max="15000" step="100" bind:value={selectedInterval} />
-		<p>Aralık:{selectedInterval / 1000} saniye</p>
-		<div class="flex gap-4">
-			<Button on:click={startGame} class="w-12">Start</Button>
-			<Button on:click={stopGame} class="w-12">Stop</Button>
+		<div>
+			<input class="w-full" type="range" min="500" max="15000" step="100" bind:value={selectedInterval} />
+			<p>Aralık:{selectedInterval / 1000} saniye</p>
 		</div>
-		<p class="text-center text-4xl">{countdown}</p>
+		<div class="flex gap-4">
+			<Button on:click={startGame} class="w-12">Başla</Button>
+			<Button on:click={stopGame} class="w-12">Bitir</Button>
+			<div class="flex flex-col">
+				<input type="range" min="20" max="500" step="5" bind:value={countdown} >
+				<label for="">Tekrar Sayısı: {countdown}</label>
+			</div>
+		</div>
 	</div>
 </div>

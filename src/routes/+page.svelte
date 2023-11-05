@@ -12,6 +12,7 @@
 	let spellingB = '';
 	let interval: any;
 	let progressBarInterval: any;
+	let isZen = false;
 	$: timer = 2000;
 	let selectedInterval = 2000;
 	const vowels = ['a', 'e', 'ı', 'i', 'o', 'ö', 'u', 'ü'];
@@ -45,12 +46,12 @@
 	let error: any = null;
 	if (browser) {
 		selectedVowels = localStorage.getItem('selectedVowels')
-		//@ts-ignore
-			? JSON.parse(localStorage.getItem('selectedVowels'))
+			? //@ts-ignore
+			  JSON.parse(localStorage.getItem('selectedVowels'))
 			: [];
 		selectedConstants = localStorage.getItem('selectedConstants')
-		//@ts-ignore
-			? JSON.parse(localStorage.getItem('selectedConstants'))
+			? //@ts-ignore
+			  JSON.parse(localStorage.getItem('selectedConstants'))
 			: [];
 	}
 
@@ -112,6 +113,7 @@
 	function startGame() {
 		if (!createdWord) randomWord();
 		clearInterval(interval);
+		clearInterval(progressBarInterval);
 		startProgressBar();
 		interval = setInterval(
 			() => {
@@ -141,70 +143,97 @@
 	});
 </script>
 
-<div class="flex h-[100vh] flex-col items-center justify-between bg-slate-300 pt-8">
-	<div class="flex flex-col gap-4">
-		<div>
-			<p>Sesli Harfler</p>
-			<p />
-			<MultiSelect
-				placeholder="Sesli Harf Ekle"
-				bind:selected={selectedVowels}
-				options={vowels}
-				outerDivClass="border border-red-300"
-			/>
-		</div>
-		<div>
-			<p>Sessiz Harfler</p>
-			<MultiSelect
-				placeholder="Sessiz Harf Ekle"
-				bind:selected={selectedConstants}
-				options={constants}
-				outerDivClass="border border-red-300"
-			/>
-		</div>
-		<div>
-			<label>
-				<input type="checkbox" bind:checked={startWithVowel} />
-				Sesli Harfle Başlasın
-			</label>
-			<label>
-				<input
-					type="checkbox"
-					bind:checked={createThreeChar}
-					on:change={() => {
-						clearInterval(interval);
-						startGame();
-					}}
+<div
+	class="flex h-[100vh] flex-col items-center {isZen
+		? 'justify-center gap-8'
+		: 'justify-around'} bg-slate-300 sm:h-full sm:min-h-screen"
+>
+	{#if !isZen}
+		<!-- content here -->
+		<div class="flex flex-col gap-4">
+			<div>
+				<p>Sesli Harfler</p>
+				<p />
+				<MultiSelect
+					placeholder="Sesli Harf Ekle"
+					bind:selected={selectedVowels}
+					options={vowels}
+					outerDivClass="border border-red-300"
 				/>
-				3 Harfli Kelime Türet
-			</label>
+			</div>
+			<div>
+				<p>Sessiz Harfler</p>
+				<MultiSelect
+					placeholder="Sessiz Harf Ekle"
+					bind:selected={selectedConstants}
+					options={constants}
+					outerDivClass="border border-red-300"
+				/>
+			</div>
+			<div>
+				<label>
+					<input type="checkbox" bind:checked={startWithVowel} />
+					Sesli Harfle Başlasın
+				</label>
+				<label>
+					<input
+						type="checkbox"
+						bind:checked={createThreeChar}
+						on:change={() => {
+							clearInterval(interval);
+							startGame();
+						}}
+					/>
+					3 Harfli Kelime Türet
+				</label>
+			</div>
 		</div>
-	</div>
+	{/if}
 	{#if error}
 		<p class="text-red-500">{error}</p>
 	{/if}
 	<div class="flex flex-col items-center">
-		<p class="text-[144px] leading-none underline">{createdWord}</p>
-		<div class="flex gap-24 text-6xl font-light leading-none underline">
+		<p class="text-9xl leading-tight underline">{createdWord}</p>
+		<div class="flex gap-16 text-6xl font-light leading-none underline">
 			<p>{spellingA}</p>
 			<p>{spellingB}</p>
 		</div>
 	</div>
-	<div class="p-4">
-		<div class="h-4 bg-red-500">
-			<div id="timer-bar" class="h-full bg-green-500" />
-		</div>
-		<div>
-			<input class="w-full" type="range" min="500" max="15000" step="100" bind:value={selectedInterval} />
-			<p>Aralık:{selectedInterval / 1000} saniye</p>
-		</div>
-		<div class="flex gap-4">
-			<Button on:click={startGame} class="w-12">Başla</Button>
-			<Button on:click={stopGame} class="w-12">Bitir</Button>
-			<div class="flex flex-col">
-				<input type="range" min="20" max="500" step="5" bind:value={countdown} >
-				<label for="">Tekrar Sayısı: {countdown}</label>
+	{#if !isZen}
+		<!-- content here -->
+		<div class="p-4">
+			<div class="h-4 bg-red-500">
+				<div id="timer-bar" class="h-full bg-green-500" />
+			</div>
+			<div>
+				<input
+					class="w-full"
+					type="range"
+					min="500"
+					max="15000"
+					step="100"
+					bind:value={selectedInterval}
+				/>
+				<p>Aralık:{selectedInterval / 1000} saniye</p>
+			</div>
+			<div class="flex gap-4 items-center">
+				<Button on:click={startGame} class="h-6 w-16 rounded-xl   bg-blue-500">Başla</Button>
+				<Button on:click={stopGame} class="h-6 w-16 rounded-xl  ">Bitir</Button>
+				<div class="flex flex-col">
+					<input type="range" min="20" max="500" step="5" bind:value={countdown} />
+					<label class="leading-none">Tekrar Sayısı: {countdown}</label>
+					<label>
+						<input type="checkbox" bind:checked={isZen} />
+						Zen Modu
+					</label>
+				</div>
 			</div>
 		</div>
-	</div>
+	{/if}
+	{#if isZen}
+		<label class="absolute top-10">
+			<input type="checkbox" bind:checked={isZen} />
+			Odak Modu
+		</label>
+	{/if}
 </div>

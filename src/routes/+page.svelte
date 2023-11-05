@@ -200,9 +200,8 @@
 		</div>
 	</div>
 	{#if !isZen}
-		<!-- content here -->
 		<div class="p-4">
-			<div class="h-4 bg-red-500">
+			<div class="h-1 bg-red-500">
 				<div id="timer-bar" class="h-full bg-green-500" />
 			</div>
 			<div>

@@ -13,7 +13,7 @@
 	let interval: any;
 	let progressBarInterval: any;
 	$: timer = 2000;
-	let selectedInterval = 2000
+	let selectedInterval = 2000;
 	const vowels = ['a', 'e', 'ı', 'i', 'o', 'ö', 'u', 'ü'];
 	const constants = [
 		'b',
@@ -42,12 +42,14 @@
 	let selectedConstants: string[] = [];
 	let startWithVowel = true;
 	let createThreeChar = false;
-	let error = null;
+	let error: any = null;
 	if (browser) {
 		selectedVowels = localStorage.getItem('selectedVowels')
+		//@ts-ignore
 			? JSON.parse(localStorage.getItem('selectedVowels'))
 			: [];
 		selectedConstants = localStorage.getItem('selectedConstants')
+		//@ts-ignore
 			? JSON.parse(localStorage.getItem('selectedConstants'))
 			: [];
 	}
@@ -117,20 +119,20 @@
 			},
 			createThreeChar ? timer * 2 : timer
 		);
-			
 	}
 	function stopGame() {
 		clearInterval(interval);
 		clearInterval(progressBarInterval);
 	}
-	function startProgressBar(){
+	function startProgressBar() {
 		const timerBar = document.getElementById('timer-bar');
-		let progressBarTimer=timer
-		progressBarTimer=timer
+		let progressBarTimer = timer;
+		progressBarTimer = timer;
 		progressBarInterval = setInterval(() => {
-			timerBar.style.width = `${(progressBarTimer/timer) * 100}%`;
-			progressBarTimer-=20
-			if(progressBarTimer===0) progressBarTimer=timer
+			// @ts-ignore
+			timerBar.style.width = `${(progressBarTimer / timer) * 100}%`;
+			progressBarTimer -= 20;
+			if (progressBarTimer === 0) progressBarTimer = timer;
 		}, 20);
 	}
 	onDestroy(() => {
@@ -190,10 +192,10 @@
 	</div>
 	<div class="p-4">
 		<div class="h-4 bg-red-500">
-			<div id="timer-bar"  class="h-full bg-green-500" />
+			<div id="timer-bar" class="h-full bg-green-500" />
 		</div>
 		<input type="range" min="500" max="15000" step="100" bind:value={selectedInterval} />
-		<p>Aralık:{selectedInterval/1000} saniye </p>
+		<p>Aralık:{selectedInterval / 1000} saniye</p>
 		<div class="flex gap-4">
 			<Button on:click={startGame} class="w-12">Start</Button>
 			<Button on:click={stopGame} class="w-12">Stop</Button>

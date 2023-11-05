@@ -245,7 +245,7 @@
 					<input type="range" min="20" max="500" step="5" bind:value={countdown} />
 					<label class="leading-none">Tekrar Sayısı: {countdown}</label>
 					<label>
-						<input type="checkbox" bind:checked={isZen} />
+						<input type="checkbox" bind:checked={isZen} disabled={!gameOn}/>
 						Odak Modu
 					</label>
 				</div>

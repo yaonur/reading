@@ -8,6 +8,7 @@
 	let countdown = 200;
 	let counter=countdown
 
+	let timerBar = document.getElementById('timer-bar');
 	let createdWord = '';
 	let spellingA = '';
 	let spellingB = '';
@@ -43,6 +44,7 @@
 	];
 	let selectedVowels: string[] = [];
 	let selectedConstants: string[] = [];
+	let progressBarTimer = timer;
 	let startWithVowel = true;
 	let createThreeChar = false;
 	let error: any = null;
@@ -113,6 +115,13 @@
 		// randomWord();
 	});
 	function startGame() {
+		if (
+			(selectedVowels.length < 2 || selectedConstants.length === 0) &&
+			(selectedVowels.length === 0 || selectedConstants.length < 2)
+		) {
+			error = 'Lütfen en az 2 sesli harf ve 1 sessiz harf seçiniz  veya 1 sesli harf ve en az 2 sessiz harf seçiniz';
+			return;
+		}
 		if (!createdWord) randomWord();
 		gameOn=true
 		timer=selectedInterval;
@@ -130,15 +139,17 @@
 	function stopGame() {
 		gameOn=false
 		counter=countdown
+		progressBarTimer = timer;
+		timerBar = document.getElementById('timer-bar');
+		timerBar.style.width = `${(progressBarTimer / timer) * 100}%`;
 		clearInterval(interval);
 		clearInterval(progressBarInterval);
 	}
 	function startProgressBar() {
-		const timerBar = document.getElementById('timer-bar');
-		let progressBarTimer = timer;
 		progressBarTimer = timer;
 		progressBarInterval = setInterval(() => {
 			// @ts-ignore
+			timerBar = document.getElementById('timer-bar');
 			timerBar.style.width = `${(progressBarTimer / timer) * 100}%`;
 			progressBarTimer -= 20;
 			if (progressBarTimer === 0) progressBarTimer = timer;

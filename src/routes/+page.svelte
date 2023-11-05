@@ -8,7 +8,7 @@
 	let countdown = 200;
 	let counter=countdown
 
-	let timerBar = document.getElementById('timer-bar');
+	let timerBar:any = ""
 	let createdWord = '';
 	let spellingA = '';
 	let spellingB = '';

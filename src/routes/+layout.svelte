@@ -30,4 +30,6 @@
 	<link rel="icon" type="image/svg" href={Logo} />
 </svelte:head>
 
-<slot />
+<div class="h-[100vh]">
+	<slot />
+</div>

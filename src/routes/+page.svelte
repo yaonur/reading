@@ -109,28 +109,29 @@
 			startWithVowel ? (spellingB = constant) : (spellingB = vowel);
 		}
 		if (counter === 0) {
-			clearInterval(interval);
-			clearInterval(progressBarInterval);
-			progressBarTimer = timer
-			timerBar.style.width = `${(progressBarTimer / timer) * 100}%`;
-			gameFinished=true
-			gameOn = false;
+			stopGame();
+			// clearInterval(interval);
+			// clearInterval(progressBarInterval);
+			// progressBarTimer = timer
+			// timerBar.style.width = `${(progressBarTimer / timer) * 100}%`;
+			// gameFinished=true
+			// gameOn = false;
 		}
 	}
 	onMount(() => {
 		// randomWord();
 	});
 	function startGame() {
-		gameFinished=false
+		gameFinished = false;
 		if (
 			(selectedVowels.length < 2 || selectedConstants.length === 0) &&
 			(selectedVowels.length === 0 || selectedConstants.length < 2)
-			) {
-				error =
+		) {
+			error =
 				'Lütfen en az 2 sesli harf ve 1 sessiz harf seçiniz  veya 1 sesli harf ve en az 2 sessiz harf seçiniz';
-				return;
-			}
-			if (!createdWord) randomWord();
+			return;
+		}
+		if (!createdWord) randomWord();
 		gameOn = true;
 		timer = selectedInterval;
 		counter = countdown;
@@ -145,6 +146,7 @@
 		);
 	}
 	function stopGame() {
+		createdWord = '';
 		gameOn = false;
 		counter = countdown;
 		progressBarTimer = timer;
@@ -170,12 +172,11 @@
 </script>
 
 <div
-	class="flex h-[100vh] flex-col items-center {isZen
+	class="flex h-full flex-col items-center {isZen
 		? 'justify-center gap-8'
 		: 'justify-around'} bg-slate-300 sm:h-full sm:min-h-screen"
 >
 	{#if !isZen && !gameOn}
-		<!-- content here -->
 		<div class="flex flex-col gap-4">
 			<div>
 				<p>Sesli Harfler</p>
@@ -202,14 +203,7 @@
 					Sesli Harfle Başlasın
 				</label>
 				<label>
-					<input
-						type="checkbox"
-						bind:checked={createThreeChar}
-						on:change={() => {
-							clearInterval(interval);
-							startGame();
-						}}
-					/>
+					<input type="checkbox" bind:checked={createThreeChar} />
 					3 Harfli Kelime Türet
 				</label>
 			</div>
@@ -219,7 +213,6 @@
 		<p class="text-red-500">{error}</p>
 	{/if}
 	{#if gameOn}
-		<!-- content here -->
 		<div class="flex flex-col items-center">
 			<p class="text-9xl leading-tight underline transition-all duration-1000 ease-linear">
 				{createdWord}
@@ -229,12 +222,12 @@
 				<p class="text-blue-600">{spellingB}</p>
 			</div>
 		</div>
-		{:else if gameFinished}
+	{:else if gameFinished}
 		<div>
 			<p>Tebrikler Bitirdin!</p>
 		</div>
 	{/if}
-	<div class="p-4 {isZen ? 'opacity-0' : 'opacity-100'}">
+	<div class="py-4 {isZen ? 'opacity-0' : 'opacity-100'}">
 		{#if gameOn}
 			<p class="text-center">Kalan Kelime:{counter}</p>
 		{/if}

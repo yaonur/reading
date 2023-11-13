@@ -164,8 +164,8 @@
 </script>
 
 <div
-	class="flex h-full flex-col items-center {isZen
-		? 'justify-center gap-8'
+	class="flex h-screen overflow-auto flex-col items-center {isZen
+		? 'justify-center space-y-8'
 		: 'justify-around'} bg-slate-300 sm:h-full sm:min-h-screen"
 >
 	{#if !isZen && !gameOn}

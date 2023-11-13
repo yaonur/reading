@@ -274,7 +274,7 @@
 			</div>
 		</div>
         <div>
-            <Button class="bg-green-600 w-full" on:click={createWord}>Elle Turet</Button>
+            <Button class="bg-green-600 w-full" on:click={createWord}>Elle Türet</Button>
         </div>
 	</div>
 	{#if isZen}

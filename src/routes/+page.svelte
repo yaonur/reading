@@ -251,7 +251,7 @@
 		</div>
 		<div class="flex items-center gap-4">
 			<Button on:click={startGame} class="h-6 w-16 rounded-xl   bg-blue-500">Başla</Button>
-			<Button on:click={stopGame} class="h-6 w-16 rounded-xl  ">Bitir</Button>
+			<Button on:click={stopGame} class="h-6 w-16 rounded-xl">Bitir</Button>
 			<div class="flex flex-col">
 				<input type="range" min="5" max="500" step="5" bind:value={countdown} />
 				<label class="leading-none">Tekrar Sayısı: {countdown}</label>
@@ -262,7 +262,7 @@
 			</div>
 		</div>
 		<div>
-            <Button class="bg-green-600 w-full" on:click={createWord}>Elle Turet</Button>
+            <Button class="bg-green-600 w-full" on:click={createWord}>Elle Türet</Button>
         </div>
 	</div>
 	{#if isZen}

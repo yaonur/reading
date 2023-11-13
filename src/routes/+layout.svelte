@@ -26,10 +26,9 @@
 	})
 </script>
 
-<svelte:head>
-	<link rel="icon" type="image/svg" href={Logo} />
-</svelte:head>
+
 
 <div class="h-[100vh]">
+	<Navbar/>
 	<slot />
 </div>

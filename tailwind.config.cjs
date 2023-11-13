@@ -81,6 +81,9 @@ module.exports = {
                 md: "calc(var(--radius) - 2px)",
                 sm: "calc(var(--radius) - 4px)"
             },
+            height:{
+                'screen-minus-navbar': 'calc(100vh - 24px)'
+            }
         }
     },
     plugins: [require("tailwindcss-animate")]

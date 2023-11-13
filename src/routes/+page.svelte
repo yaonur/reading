@@ -121,6 +121,10 @@
 	onMount(() => {
 		// randomWord();
 	});
+	function createWord(){
+        gameOn=true
+        randomWord()
+    }
 	function startGame() {
 		gameFinished = false;
 		if (
@@ -172,7 +176,7 @@
 </script>
 
 <div
-	class="flex h-full flex-col items-center {isZen
+	class="flex h-screen-minus-navbar flex-col items-center {isZen
 		? 'justify-center gap-8'
 		: 'justify-around'} bg-slate-300 sm:h-full sm:min-h-screen"
 >
@@ -257,6 +261,9 @@
 				</label>
 			</div>
 		</div>
+		<div>
+            <Button class="bg-green-600 w-full" on:click={createWord}>Elle Turet</Button>
+        </div>
 	</div>
 	{#if isZen}
 		<label class="absolute top-10">

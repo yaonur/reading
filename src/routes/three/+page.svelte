@@ -43,8 +43,6 @@
 		'y',
 		'z'
 	];
-	let selectedVowels: string[] = [];
-	let selectedConstants: string[] = [];
     let selectedFirstChars: string[] = [];
     let selectedSecondChars: string[] = [];
     let selectedThirdChars: string[] = [];
@@ -56,13 +54,17 @@
 	let createThreeChar = false;
 	let error: any = null;
 	if (browser) {
-		selectedVowels = localStorage.getItem('selectedVowels')
+		selectedFirstChars = localStorage.getItem('selectedFirstChars')
 			? //@ts-ignore
-			  JSON.parse(localStorage.getItem('selectedVowels'))
+			  JSON.parse(localStorage.getItem('selectedFirstChars'))
 			: [];
-		selectedConstants = localStorage.getItem('selectedConstants')
+		selectedSecondChars = localStorage.getItem('selectedSecondChars')
 			? //@ts-ignore
-			  JSON.parse(localStorage.getItem('selectedConstants'))
+			  JSON.parse(localStorage.getItem('selectedSecondChars'))
+			: [];
+        selectedThirdChars = localStorage.getItem('selectedThirdChars')
+			? //@ts-ignore
+			  JSON.parse(localStorage.getItem('selectedThirdChars'))
 			: [];
 	}
 
@@ -80,14 +82,6 @@
 
 	async function randomWord() {
 		error = null;
-		if (
-			(selectedVowels.length < 2 || selectedConstants.length === 0) &&
-			(selectedVowels.length === 0 || selectedConstants.length < 2)
-		) {
-			error =
-				'Lütfen en az 2 sesli harf ve 1 sessiz harf seçiniz  veya 1 sesli harf ve en az 2 sessiz harf seçiniz';
-			return;
-		}
 		let randomIndexFirstChar;
 		let randomIndexSecondChar;
 		let randomIndexThirdChar;
@@ -128,14 +122,7 @@
 	});
 	function startGame() {
 		gameFinished = false;
-		if (
-			(selectedVowels.length < 2 || selectedConstants.length === 0) &&
-			(selectedVowels.length === 0 || selectedConstants.length < 2)
-		) {
-			error =
-				'Lütfen en az 2 sesli harf ve 1 sessiz harf seçiniz  veya 1 sesli harf ve en az 2 sessiz harf seçiniz';
-			return;
-		}
+		
 		if (!createdWord) randomWord();
 		gameOn = true;
 		timer = selectedInterval;
@@ -254,7 +241,7 @@
 	{/if}
 	<div class="py-4 {isZen ? 'opacity-0' : 'opacity-100'}">
 		{#if gameOn}
-			<p class="text-center">Kalan Kelime:{counter}</p>
+			<p class="text-center text-6xl">Kalan Kelime:{counter}</p>
 		{/if}
 		<div class="h-1 bg-red-500">
 			<div id="timer-bar" class="h-full bg-green-500" />

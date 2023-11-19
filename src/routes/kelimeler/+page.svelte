@@ -63,7 +63,7 @@
 		error = null;
 		let randomIndexWord;
 		do {
-			randomIndexWord = Math.floor(Math.random() * selectedVowels.length);
+			randomIndexWord = Math.floor(Math.random() * words.length);
             createdWord = words[randomIndexWord][0]
             syllables = words[randomIndexWord][1]
 		} while (createdWord === previousWord);
@@ -77,7 +77,7 @@
 			// clearInterval(progressBarInterval);
 			// progressBarTimer = timer
 			// timerBar.style.width = `${(progressBarTimer / timer) * 100}%`;
-			// gameFinished=true
+			gameFinished=true
 			// gameOn = false;
 		}
 	}
@@ -197,9 +197,9 @@
             <Button class="bg-green-600 w-full" on:click={createWord}>Elle Türet</Button>
         </div>
         <div class="flex gap-4 mt-4">
-            <Button class="bg-blue-600 w-full" on:click={()=>counter=20}>20</Button>
-            <Button class="bg-blue-600 w-full" on:click={()=>counter=40}>40</Button>
-            <Button class="bg-blue-600 w-full" on:click={()=>counter=60}>60</Button>
+            <Button class="bg-blue-600 w-full" on:click={()=>countdown=20}>20</Button>
+            <Button class="bg-blue-600 w-full" on:click={()=>countdown=40}>40</Button>
+            <Button class="bg-blue-600 w-full" on:click={()=>countdown=60}>60</Button>
         </div>
 	</div>
 	{#if isZen}

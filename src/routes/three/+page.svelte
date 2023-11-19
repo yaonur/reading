@@ -6,7 +6,7 @@
 
 	let previousWord = '';
 	let countdown = 200;
-	let counter = countdown;
+	$: counter = countdown;
 
 	let timerBar: any = '';
 	let createdWord = '';
@@ -43,12 +43,12 @@
 		'y',
 		'z'
 	];
-    let selectedFirstChars: string[] = [];
-    let selectedSecondChars: string[] = [];
-    let selectedThirdChars: string[] = [];
-    let isVowelFirst = true;
-    let isVowelSecond = true;
-    let isVowelThird = true;
+	let selectedFirstChars: string[] = [];
+	let selectedSecondChars: string[] = [];
+	let selectedThirdChars: string[] = [];
+	let isVowelFirst = true;
+	let isVowelSecond = true;
+	let isVowelThird = true;
 	let progressBarTimer = timer;
 	let startWithVowel = true;
 	let createThreeChar = false;
@@ -62,7 +62,7 @@
 			? //@ts-ignore
 			  JSON.parse(localStorage.getItem('selectedSecondChars'))
 			: [];
-        selectedThirdChars = localStorage.getItem('selectedThirdChars')
+		selectedThirdChars = localStorage.getItem('selectedThirdChars')
 			? //@ts-ignore
 			  JSON.parse(localStorage.getItem('selectedThirdChars'))
 			: [];
@@ -97,8 +97,8 @@
 			secondChar = selectedSecondChars[randomIndexSecondChar];
 			thirdChar = selectedThirdChars[randomIndexThirdChar];
 			createdWord = firstChar + secondChar + thirdChar;
-            spellingA = firstChar+secondChar;
-            spellingB = thirdChar;
+			spellingA = firstChar + secondChar;
+			spellingB = thirdChar;
 			// if (countdown === 0) {
 			// 	break;
 			// }
@@ -117,16 +117,47 @@
 			// gameOn = false;
 		}
 	}
+	// function speak(word:string) {
+	// 	if(browser){
+	// 		const utterance = new SpeechSynthesisUtterance(word);
+	// 		utterance.lang='tr-TR'
+	// 		const voices =window.speechSynthesis.getVoices()
+	// 		console.log(voices)
+	// 		speechSynthesis.speak(utterance);
+	// 	}
+	// }
+	async function speak(word: string) {
+		if (browser) {
+			const response = await fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: 'Bearer YOUR_OPENAI_KEY'
+				},
+				body: JSON.stringify({
+					prompt: `Translate the following English text to Turkish: "${word}"`,
+					max_tokens: 60
+				})
+			});
+			const data = await response.json();
+			const translatedText = data.choices[0].text.trim();
+
+			const utterance = new SpeechSynthesisUtterance(translatedText);
+			utterance.lang = 'tr-TR';
+			speechSynthesis.speak(utterance);
+		}
+	}
 	onMount(() => {
 		// randomWord();
 	});
-    function createWord(){
-        gameOn=true
-        randomWord()
-    }
+	function createWord() {
+		gameOn = true;
+		randomWord();
+		// speak(createdWord);
+	}
 	function startGame() {
 		gameFinished = false;
-		
+
 		if (!createdWord) randomWord();
 		gameOn = true;
 		timer = selectedInterval;
@@ -168,7 +199,7 @@
 </script>
 
 <div
-	class="flex h-screen-minus-navbar overflow-auto flex-col items-center {isZen
+	class="flex h-screen-minus-navbar flex-col items-center overflow-auto {isZen
 		? 'justify-center space-y-8'
 		: 'justify-around'} bg-slate-300 sm:h-full sm:min-h-screen"
 >
@@ -176,40 +207,40 @@
 		<div class="flex flex-col gap-4">
 			<div>
 				<p>Birinci Harf</p>
-                <label>
+				<label>
 					<input type="checkbox" bind:checked={isVowelFirst} />
-					Sesli Harfler 
+					Sesli Harfler
 				</label>
 				<MultiSelect
 					placeholder="Sesli Harf Ekle"
 					bind:selected={selectedFirstChars}
-					options={isVowelFirst?vowels:constants}
+					options={isVowelFirst ? vowels : constants}
 					outerDivClass="border border-red-300"
 				/>
 			</div>
 			<div>
 				<p>Ikinci harf</p>
-                <label>
+				<label>
 					<input type="checkbox" bind:checked={isVowelSecond} />
-					Sesli Harfler 
+					Sesli Harfler
 				</label>
 				<MultiSelect
 					placeholder="Sessiz Harf Ekle"
 					bind:selected={selectedSecondChars}
-					options={isVowelSecond?vowels:constants}
+					options={isVowelSecond ? vowels : constants}
 					outerDivClass="border border-red-300"
 				/>
 			</div>
-            <div>
-				<p>Ucuncu  Harf</p>
-                <label>
+			<div>
+				<p>Ucuncu Harf</p>
+				<label>
 					<input type="checkbox" bind:checked={isVowelThird} />
-					Sesli Harfler 
+					Sesli Harfler
 				</label>
 				<MultiSelect
 					placeholder="Sessiz Harf Ekle"
 					bind:selected={selectedThirdChars}
-					options={isVowelThird?vowels:constants}
+					options={isVowelThird ? vowels : constants}
 					outerDivClass="border border-red-300"
 				/>
 			</div>
@@ -273,9 +304,9 @@
 				</label>
 			</div>
 		</div>
-        <div>
-            <Button class="bg-green-600 w-full" on:click={createWord}>Elle Türet</Button>
-        </div>
+		<div>
+			<Button class="w-full bg-green-600" on:click={createWord}>Elle Türet</Button>
+		</div>
 	</div>
 	{#if isZen}
 		<label class="absolute top-10">

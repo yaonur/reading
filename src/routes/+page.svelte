@@ -3,10 +3,20 @@
 	import MultiSelect from 'svelte-multiselect';
 	import { onDestroy, onMount } from 'svelte';
 	import { browser } from '$app/environment';
+	let isSpeechSupported =browser && 'speechSynthesis' in window;
+	function speak(word:string) {
+		if(browser){
+			const utterance = new SpeechSynthesisUtterance(word);
+			utterance.lang='tr-TR'
+			const voices =window.speechSynthesis.getVoices()
+			console.log(voices)
+			speechSynthesis.speak(utterance);
+		}
+	}
 
 	let previousWord = '';
 	let countdown = 200;
-	let counter = countdown;
+	$: counter = countdown;
 
 	let timerBar: any = '';
 	let createdWord = '';
@@ -124,6 +134,7 @@
 	function createWord(){
         gameOn=true
         randomWord()
+		// speak(createdWord)
     }
 	function startGame() {
 		gameFinished = false;

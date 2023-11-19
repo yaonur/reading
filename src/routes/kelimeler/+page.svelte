@@ -70,7 +70,7 @@
             console.log('selectedWord',selectedWord)
             filteredWord=words.filter((word)=>word[0]===selectedWord)
             console.log('filteredWord',filteredWord)
-            syllables = filteredWord[0][1]
+            syllables = filteredWord[0][1] ?? filteredWord[0][0] 
             console.log('createdWord',filteredWord[0][0])
             createdWord=filteredWord[0][0]
             counter--;

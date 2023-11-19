@@ -196,6 +196,11 @@
 		<div>
             <Button class="bg-green-600 w-full" on:click={createWord}>Elle Türet</Button>
         </div>
+        <div class="flex gap-4 mt-4">
+            <Button class="bg-blue-600 w-full" on:click={()=>counter=20}>20</Button>
+            <Button class="bg-blue-600 w-full" on:click={()=>counter=40}>40</Button>
+            <Button class="bg-blue-600 w-full" on:click={()=>counter=60}>60</Button>
+        </div>
 	</div>
 	{#if isZen}
 		<label class="absolute top-10">

@@ -21,7 +21,7 @@
     let syllables:[] =[] 
 
 	let timerBar: any = '';
-	let createdWord = '';
+	$: createdWord = '';
 	let spellingA = '';
 	let spellingB = '';
 	let interval: any;
@@ -32,15 +32,15 @@
 	$: timer = 2000;
 	let selectedInterval = 2000;
 	
-	let selectedVowels: string[] = [];
+	let selectedWords: string[] = [];
 	let selectedConstants: string[] = [];
 	let progressBarTimer = timer;
 	let createThreeChar = false;
 	let error: any = null;
 	if (browser) {
-		selectedVowels = localStorage.getItem('selectedVowels')
+		selectedWords = localStorage.getItem('selectedWords')
 			? //@ts-ignore
-			  JSON.parse(localStorage.getItem('selectedVowels'))
+			  JSON.parse(localStorage.getItem('selectedWords'))
 			: [];
 		selectedConstants = localStorage.getItem('selectedConstants')
 			? //@ts-ignore
@@ -50,7 +50,7 @@
 
 	$: {
 		if (browser) {
-			localStorage.setItem('selectedVowels', JSON.stringify(selectedVowels));
+			localStorage.setItem('selectedWords', JSON.stringify(selectedWords));
 			localStorage.setItem('selectedConstants', JSON.stringify(selectedConstants));
 		}
 	}
@@ -62,12 +62,22 @@
 	async function randomWord() {
 		error = null;
 		let randomIndexWord;
+        let selectedWord=''
+        let filteredWord=[]
 		do {
-			randomIndexWord = Math.floor(Math.random() * words.length);
-            createdWord = words[randomIndexWord][0]
-            syllables = words[randomIndexWord][1]
-		} while (createdWord === previousWord);
-		counter--;
+			randomIndexWord = Math.floor(Math.random() * selectedWords.length);
+            selectedWord = selectedWords[randomIndexWord]
+            console.log('selectedWord',selectedWord)
+            filteredWord=words.filter((word)=>word[0]===selectedWord)
+            console.log('filteredWord',filteredWord)
+            syllables = filteredWord[0][1]
+            console.log('createdWord',filteredWord[0][0])
+            createdWord=filteredWord[0][0]
+            counter--;
+            if(counter===0){
+                break
+            }
+		} while (createdWord == previousWord);
 
 		previousWord = createdWord;
 
@@ -92,8 +102,8 @@
 	function startGame() {
 		gameFinished = false;
 		if (
-			(selectedVowels.length < 2 || selectedConstants.length === 0) &&
-			(selectedVowels.length === 0 || selectedConstants.length < 2)
+			(selectedWords.length < 2 || selectedConstants.length === 0) &&
+			(selectedWords.length === 0 || selectedConstants.length < 2)
 		) {
 			error =
 				'Lütfen en az 2 sesli harf ve 1 sessiz harf seçiniz  veya 1 sesli harf ve en az 2 sessiz harf seçiniz';
@@ -144,6 +154,20 @@
 		? 'justify-center gap-8'
 		: 'justify-around'} bg-slate-300 sm:h-full sm:min-h-screen"
 >
+{#if !isZen && !gameOn}
+		<div class="flex flex-col gap-4">
+			<div>
+				<p>Sesli Harfler</p>
+				<p />
+				<MultiSelect
+					placeholder="Sesli Harf Ekle"
+					bind:selected={selectedWords}
+					options={words.map((word)=>word[0])}
+					outerDivClass="border border-red-300"
+				/>
+			</div>
+		</div>
+	{/if}
 	{#if error}
 		<p class="text-red-500">{error}</p>
 	{/if}

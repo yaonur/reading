@@ -186,9 +186,9 @@
 					<p class={cn(' rounded-[40px] border-b-4 pb-2 border-black', `${textColors[i]}`)}>{syllable}</p>
 				{/each}
 			</div>
-			<div class="flex gap-16 text-6xl font-light leading-none underline">
+			<div class="flex gap-16 text-6xl font-light leading-none ">
 				{#each syllables as syllable}
-					<p class="">{syllable}</p>
+					<p class="rounded-[34px] border-b-4 pb-2 border-black">{syllable}</p>
 				{/each}
 			</div>
 		</div>

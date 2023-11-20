@@ -3,14 +3,15 @@
 	import MultiSelect from 'svelte-multiselect';
 	import { onDestroy, onMount } from 'svelte';
 	import { browser } from '$app/environment';
-    import {words} from "./words"
-	let isSpeechSupported =browser && 'speechSynthesis' in window;
-	function speak(word:string) {
-		if(browser){
+	import { words } from './words';
+	import { cn } from '$lib/utils/cn';
+	let isSpeechSupported = browser && 'speechSynthesis' in window;
+	function speak(word: string) {
+		if (browser) {
 			const utterance = new SpeechSynthesisUtterance(word);
-			utterance.lang='tr-TR'
-			const voices =window.speechSynthesis.getVoices()
-			console.log(voices)
+			utterance.lang = 'tr-TR';
+			const voices = window.speechSynthesis.getVoices();
+			console.log(voices);
 			speechSynthesis.speak(utterance);
 		}
 	}
@@ -18,7 +19,7 @@
 	let previousWord = '';
 	let countdown = 200;
 	$: counter = countdown;
-    let syllables:[] =[] 
+	let syllables: [] = [];
 
 	let timerBar: any = '';
 	$: createdWord = '';
@@ -31,7 +32,7 @@
 	let gameFinished = false;
 	$: timer = 2000;
 	let selectedInterval = 2000;
-	
+
 	let selectedWords: string[] = [];
 	let selectedConstants: string[] = [];
 	let progressBarTimer = timer;
@@ -62,21 +63,21 @@
 	async function randomWord() {
 		error = null;
 		let randomIndexWord;
-        let selectedWord=''
-        let filteredWord=[]
+		let selectedWord = '';
+		let filteredWord = [];
 		do {
 			randomIndexWord = Math.floor(Math.random() * selectedWords.length);
-            selectedWord = selectedWords[randomIndexWord]
-            console.log('selectedWord',selectedWord)
-            filteredWord=words.filter((word)=>word[0]===selectedWord)
-            console.log('filteredWord',filteredWord)
-            syllables = filteredWord[0][1] ?? filteredWord[0][0] 
-            console.log('createdWord',filteredWord[0][0])
-            createdWord=filteredWord[0][0]
-            counter--;
-            if(counter===0){
-                break
-            }
+			selectedWord = selectedWords[randomIndexWord];
+			console.log('selectedWord', selectedWord);
+			filteredWord = words.filter((word) => word[0] === selectedWord);
+			console.log('filteredWord', filteredWord);
+			syllables = filteredWord[0][1] ?? filteredWord[0][0];
+			console.log('createdWord', filteredWord[0][0]);
+			createdWord = filteredWord[0][0];
+			counter--;
+			if (counter === 0) {
+				break;
+			}
 		} while (createdWord == previousWord);
 
 		previousWord = createdWord;
@@ -87,18 +88,18 @@
 			// clearInterval(progressBarInterval);
 			// progressBarTimer = timer
 			// timerBar.style.width = `${(progressBarTimer / timer) * 100}%`;
-			gameFinished=true
+			gameFinished = true;
 			// gameOn = false;
 		}
 	}
 	onMount(() => {
 		// randomWord();
 	});
-	function createWord(){
-        gameOn=true
-        randomWord()
+	function createWord() {
+		gameOn = true;
+		randomWord();
 		// speak(createdWord)
-    }
+	}
 	function startGame() {
 		gameFinished = false;
 		if (
@@ -147,14 +148,16 @@
 		clearInterval(interval);
 		clearInterval(progressBarInterval);
 	});
+	const colors = ['border-red-700', 'border-blue-700', 'border-green-700','border-red-700', 'border-blue-700', 'border-red-700',  ];
+	const textColors = ['text-red-700', 'text-blue-700', 'text-yellow-500','text-black-700','text-red-700', 'text-blue-700', 'text-yellow-500','text-black-700',    ];
 </script>
 
 <div
-	class="flex h-screen-minus-navbar flex-col items-center {isZen
+	class="h-screen-minus-navbar flex flex-col items-center  {isZen
 		? 'justify-center gap-8'
 		: 'justify-around'} bg-slate-300 sm:h-full sm:min-h-screen"
 >
-{#if !isZen && !gameOn}
+	{#if !isZen && !gameOn}
 		<div class="flex flex-col gap-4">
 			<div>
 				<p>Sesli Harfler</p>
@@ -162,7 +165,7 @@
 				<MultiSelect
 					placeholder="Sesli Harf Ekle"
 					bind:selected={selectedWords}
-					options={words.map((word)=>word[0])}
+					options={words.map((word) => word[0])}
 					outerDivClass="border border-red-300"
 				/>
 			</div>
@@ -172,14 +175,21 @@
 		<p class="text-red-500">{error}</p>
 	{/if}
 	{#if gameOn}
-		<div class="flex flex-col items-center">
-			<p class="text-9xl leading-tight underline transition-all duration-1000 ease-linear">
-				{createdWord}
-			</p>
+		<div class="flex flex-col items-center gap-8">
+			<!-- <div class="flex text-9xl font-light leading-none">
+				{#each syllables as syllable, i}
+					<p >{syllable}</p>
+				{/each}
+			</div> -->
+			<div class="flex text-9xl font-light leading-none">
+				{#each syllables as syllable, i}
+					<p class={cn(' rounded-[40px] border-b-4 pb-2 border-black', `${textColors[i]}`)}>{syllable}</p>
+				{/each}
+			</div>
 			<div class="flex gap-16 text-6xl font-light leading-none underline">
-				{#each syllables as syllable }
-                    <p>{syllable}</p>
-                {/each}
+				{#each syllables as syllable}
+					<p class="">{syllable}</p>
+				{/each}
 			</div>
 		</div>
 	{:else if gameFinished}
@@ -189,7 +199,7 @@
 	{/if}
 	<div class="py-4 {isZen ? 'opacity-0' : 'opacity-100'}">
 		{#if gameOn}
-			<p class="text-center">Kalan Kelime:{counter}</p>
+			<span class="text-center">Kalan Kelime:{counter}</span>
 		{/if}
 		<div class="h-1 bg-red-500">
 			<div id="timer-bar" class="h-full bg-green-500" />
@@ -218,13 +228,13 @@
 			</div>
 		</div>
 		<div>
-            <Button class="bg-green-600 w-full" on:click={createWord}>Elle Türet</Button>
-        </div>
-        <div class="flex gap-4 mt-4">
-            <Button class="bg-blue-600 w-full" on:click={()=>countdown=20}>20</Button>
-            <Button class="bg-blue-600 w-full" on:click={()=>countdown=40}>40</Button>
-            <Button class="bg-blue-600 w-full" on:click={()=>countdown=60}>60</Button>
-        </div>
+			<Button class="w-full bg-green-600" on:click={createWord}>Elle Türet</Button>
+		</div>
+		<div class="mt-4 flex gap-4">
+			<Button class="w-full bg-blue-600" on:click={() => (countdown = 20)}>20</Button>
+			<Button class="w-full bg-blue-600" on:click={() => (countdown = 40)}>40</Button>
+			<Button class="w-full bg-blue-600" on:click={() => (countdown = 60)}>60</Button>
+		</div>
 	</div>
 	{#if isZen}
 		<label class="absolute top-10">
@@ -233,3 +243,18 @@
 		</label>
 	{/if}
 </div>
+
+<style>
+	.chaperon {
+		position: relative;
+	}
+
+	.chaperon::after {
+		content: '(';
+		position: absolute;
+		bottom: -60px; /* Adjust this value as needed */
+		left: 50%;
+		transform: translateX(-50%) rotate(-90deg);
+		font-size: 100;
+	}
+</style>

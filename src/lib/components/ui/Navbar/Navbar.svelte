@@ -13,6 +13,9 @@
 			<li class="bg-blue-300 text-center">
 				<a class="w-[120px] inline-block" href="/kelimeler">Kelimeler</a>
 			</li>
+			<li class="bg-blue-300 text-center">
+				<a class="w-[120px] inline-block" href="/pfive">Toplama 5</a>
+			</li>
 		</ul>
 	</nav>
 </div>

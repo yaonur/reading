@@ -13,8 +13,11 @@
 		if (num === oldNum) randomNum();
 	};
 	function handleAnswer(e, answer) {
+        console.log(e.target)
 		if (answer === num - 5) {
 			target--;
+            e.target.classList.add('celebrate');
+            setTimeout(() => e.target.classList.remove('celebrate'), 1000);
 			if (target === 0) {
 				isFinished = true;
 				return;
@@ -47,6 +50,8 @@
 		<input type="range" min="10" max="400" bind:value={target} step="10" />
 		<p>Kalan= {target}</p>
 	</div>
+    <!-- Dummy element to prevent Svelte from removing the 'celebrate' class -->
+    <div class="celebrate" style="display: none;"></div>
 </div>
 
 <style>
@@ -54,4 +59,18 @@
 		transform: scale(0.8);
 		transition: transform 0.15s;
 	}
+    .celebrate {
+        animation: celebrate 1.5s;
+    }
+
+    @keyframes celebrate {
+        0%, 100% { 
+            transform: scale(1); 
+            background-color: rgb(147 197 253); /* Initial color */
+        }
+        50% { 
+            transform: scale(1.4); 
+            background-color: #4ff13d; /* Color at the midpoint of the animation */
+        }
+    }
 </style>

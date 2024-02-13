@@ -32,7 +32,7 @@
 	}
 </script>
 
-<div class="flex flex-col justify-center px-44 py-10 gap-4 text-2xl">
+<div class="flex flex-col justify-center items-center px-44 py-10 gap-4 text-2xl">
 	{#if isFinished}
 		<p>Tebrikler Bitirdin!!!</p>
 		<button class="h-8 w-20 bg-green-400" on:click={handleRestart}>Yeniden Basla</button>
@@ -40,10 +40,10 @@
 		<p class="text-6xl">{num}=5+x</p>
 		<p class="text-6xl">x=?</p>
 		<div class="flex gap-4">
-			<button class={'bg-blue-300 w-20'} on:click={(e) => handleAnswer(e, 1)}>1</button>
-			<button class={'bg-blue-300 w-20'} on:click={(e) => handleAnswer(e, 2)}>2</button>
-			<button class={'bg-blue-300 w-20'} on:click={(e) => handleAnswer(e, 3)}>3</button>
-			<button class={'bg-blue-300 w-20'} on:click={(e) => handleAnswer(e, 4)}>4</button>
+			<button class='bg-blue-300 w-20' on:click={(e) => handleAnswer(e, 1)}>1</button>
+			<button class='bg-blue-300 w-20' on:click={(e) => handleAnswer(e, 2)}>2</button>
+			<button class='bg-blue-300 w-20' on:click={(e) => handleAnswer(e, 3)}>3</button>
+			<button class='bg-blue-300 w-20' on:click={(e) => handleAnswer(e, 4)}>4</button>
 		</div>
 		<button class="h-8 w-40 bg-green-400" on:click={randomNum}>Siradaki</button>
 		<div>
